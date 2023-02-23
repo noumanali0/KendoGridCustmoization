@@ -1,0 +1,134 @@
+﻿@model IEnumerable<RemoteBindingGrid.Models.Student>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@Styles.Render("~/bundles/controllers/dprpro_styles")
+@Scripts.Render("~/bundles/controllers/dprpro")
+
+
+<script>
+    if (SR.DprPro.Instance == null) {
+        SR.DprPro.Instance = new SR.DprPro();
+    }
+</script>
+
+
+@(Html.Kendo().Grid<RemoteBindingGrid.Models.Student>()
+    .Name("Grid")
+
+    .Columns(columns => {
+        columns.Bound(s => s.StudentID).ClientTemplate("#= SR.DprPro.Instance.rowTemplate(data)#");
+        columns.Bound(p => p.StudentName).Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)));
+        columns.Bound(p => p.StudentCity);
+
+    })
+    .ToolBar(toolbar => {
+
+
+        toolbar.Template(@<text>
+
+            <button onclick="SR.DprPro.Instance.openDialog()" target="_blank" id="add" class="k-button k-button-icontext sr-toolbarbutton" title=""><span class="fa fa-plus-circle"></span></button>
+            <a href="@Url.Action("Create","Home")" id="view" target="_blank" class="k-button k-button-icontext sr-toolbarbutton" title=""><span class="fa fa-edit"></span></a>
+            <button onclick="" id="edit" class="k-grid-edit k-button k-button-icontext sr-toolbarbutton" ><span class="fa fa-eye"></span></button>
+            <button onclick="" id="delete" class="k-grid-edit k-button k-button-icontext sr-toolbarbutton" ><span class="fa fa-trash"></span></button>
+            <button onclick="" id="reactivate" class="k-grid-edit k-button k-button-icontext sr-toolbarbutton" ><span class="fa fa-refresh"></span></button>
+            <button onclick="" id="printDPR" class="k-grid-edit k-button k-button-icontext sr-toolbarbutton" ><span class="fa fa-print"></span></button>
+            <button onclick="" id="plannedValues" class="k-grid-edit k-button k-button-icontext sr-toolbarbutton" ><span class="fa fa-calendar-o"></span></button>
+            <button onclick="" id="exportPDF" class="k-grid-edit k-button k-button-icontext sr-toolbarbutton" ><span class="fa fa-file-pdf-o"></span></button>
+            <button onclick="" id="exportExcel" class="k-grid-edit k-button k-button-icontext sr-toolbarbutton" ><span class="fa fa-file-excel-o"></span></button>
+        </text>);
+
+    })
+    .Height(550)
+    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+    .Navigatable()
+    .Sortable(sortable => sortable.AllowUnsort(true))
+    .Scrollable()
+    .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Cell))
+    .Events(events => events.Change("SR.DprPro.Instance.onChange"))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .PageSize(20)
+        .ServerOperation(false)
+        .Model(model => model.Id(p => p.StudentID))
+        .Read("Read", "Home")
+
+    )
+)
+@(Html.Kendo().Tooltip()
+        .For("#add")
+        .Position(TooltipPosition.Right)
+        .Animation(e => e.Open(o => o.Zoom(ZoomDirection.In).Duration(150)))
+        .Width(75)
+        .Content("Add New")
+    )
+@(Html.Kendo().Tooltip()
+        .For("#view")
+        .Position(TooltipPosition.Right)
+        .Animation(e => e.Open(o => o.Zoom(ZoomDirection.In).Duration(150)))
+        .Width(75)
+        .Content("Edit")
+    )
+@(Html.Kendo().Tooltip()
+        .For("#edit")
+        .Position(TooltipPosition.Right)
+        .Animation(e => e.Open(o => o.Zoom(ZoomDirection.In).Duration(150)))
+        .Width(75)
+        .Content("View")
+    )
+@(Html.Kendo().Tooltip()
+        .For("#delete")
+        .Position(TooltipPosition.Right)
+        .Animation(e => e.Open(o => o.Zoom(ZoomDirection.In).Duration(150)))
+        .Width(75)
+        .Content("Delete")
+    )
+@(Html.Kendo().Tooltip()
+        .For("#reactivate")
+        .Position(TooltipPosition.Right)
+        .Animation(e => e.Open(o => o.Zoom(ZoomDirection.In).Duration(150)))
+        .Width(75)
+        .Content("Re-activate")
+    )
+@(Html.Kendo().Tooltip()
+        .For("#printDPR")
+        .Position(TooltipPosition.Right)
+        .Animation(e => e.Open(o => o.Zoom(ZoomDirection.In).Duration(150)))
+        .Width(75)
+        .Content("Print DPRs")
+    )
+@(Html.Kendo().Tooltip()
+        .For("#plannedValues")
+        .Position(TooltipPosition.Right)
+        .Animation(e => e.Open(o => o.Zoom(ZoomDirection.In).Duration(150)))
+        .Width(75)
+        .Content("Planned Values")
+    )
+@(Html.Kendo().Tooltip()
+        .For("#exportPDF")
+        .Position(TooltipPosition.Right)
+        .Animation(e => e.Open(o => o.Zoom(ZoomDirection.In).Duration(150)))
+        .Width(75)
+        .Content("Export Grid to PDF")
+    )
+@(Html.Kendo().Tooltip()
+        .For("#exportExcel")
+        .Position(TooltipPosition.Right)
+        .Animation(e => e.Open(o => o.Zoom(ZoomDirection.In).Duration(150)))
+        .Width(75)
+        .Content("Export Grid to Excel")
+    )
+
+
+
+<div id="dialog"></div>
+
+
+
+
+
+
+

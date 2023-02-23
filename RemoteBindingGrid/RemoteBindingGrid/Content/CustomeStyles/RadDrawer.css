@@ -1,0 +1,66 @@
+﻿
+
+#drawer-content li {
+    font-size: 1.2em;
+    padding-left: .89em;
+    background: 0 0;
+    border-radius: 0;
+    border-width: 0 0 1px;
+    border-color: rgba(33, 37, 41, 0.125);
+    border-style: solid;
+    line-height: 1.5em;
+    padding: 1.09em .84em 1.23em .84em;
+}
+
+    #drawer-content li:last-child {
+        border: 0;
+    }
+
+.hidden {
+    display: none;
+}
+
+
+.k-icon {
+    font-size: 24px;
+}
+
+
+.k-drawer-item.k-selected {
+    background-color: #1c5a7c;
+    
+}
+
+.k-drawer-item {
+    border: 1px solid;
+    border-color: gray
+}
+
+
+.k-drawer {
+    border: 1px solid;
+    border-color: gray;
+    border-radius:5px;
+    height: 70% !important;
+}
+
+
+
+label {
+    font-size:12px;
+    text-align: left;
+    font-weight: 600;
+    color: #1c5a7c;
+    gap:2px;
+    
+}
+
+#Activities{
+    margin:10px;
+}
+
+
+.k-input-value-text{
+    background-color:transparent;
+}
+

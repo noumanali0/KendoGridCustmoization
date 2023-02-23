@@ -1,0 +1,280 @@
+﻿@using RemoteBindingGrid.Models;
+@using RemoteBindingGrid.HTMLHelpers;
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@Styles.Render("~/bundles/controllers/raddrawer_styles")
+@Scripts.Render("~/bundles/controllers/dprpro")
+
+
+
+
+<script>
+    if (SR.DprPro.Instance == null) {
+        SR.DprPro.Instance = new SR.DprPro();
+    }
+</script>
+
+
+
+
+
+    <div class="row">
+        @(Html.Kendo().ToolBar().Name("toolbar").Items(items=> {
+            items.Add().Type(CommandType.Button).Icon("menu").HtmlAttributes(new { @class="k-flat"}).Click("SR.DprPro.Instance.toggleDrawer");
+            items.Add().Template("<h3 style='margin-left: 20px;'>Rad Drawer</h3>");
+        }))
+        @(Html.Kendo().Drawer()
+            .Name("drawer")
+            .Template(@"
+            <ul>
+                <li data-role='drawer-item' class='k-selected'><span class='k-icon k-i-clipboard-text'></span><span class='k-item-text' data-id='Activities'>Activities</span></li>
+                <li data-role='drawer-item'><span class='k-icon k-i-cloud'></span><span class='k-item-text' data-id='Weather'>Weather</span></li>
+                <li data-role='drawer-item'><span class='k-icon k-i-calendar'></span><span class='k-item-text' data-id='Transport'>Transport</span></li>
+                <li data-role='drawer-item'><span class='k-icon k-i-hyperlink-email'></span><span class='k-item-text' data-id='HSE'>HSE</span></li>
+                <li data-role='drawer-item'><span class='k-icon k-i-star-outline k-i-bookmark-outline'></span><span class='k-item-text' data-id='Additional'>Additional</span></li>
+            </ul>")
+                .Mode("push")
+                .Mini(true)
+                .Position("left")
+                .MinHeight(330)
+                .SwipeToOpen(true)
+                .Content(BuildDrawerContent().ToHtmlString())
+
+        .Events(x => x.ItemClick("SR.DprPro.Instance.onItemClick")))
+    </div>
+
+
+
+@helper BuildDrawerContent() { 
+    <div id='drawer-content'>
+        <div id='Activities'>
+
+            <div class="row">
+                <div class="col col-sm-3">
+                    <div class="form-group" style="display:flex;">
+                        <label class="col-sm-2 control-label k-p-1"" >Activity</label>
+                        <div class="col-sm-10" style="margin-left:10px;">
+                            @(Html.Kendo().DropDownList()
+                            .Name("acitvity")
+                            .HtmlAttributes(new { style = "width:100%" })
+                            .OptionLabel("Select...")
+                            .DataTextField("ProductName")
+                            .DataValueField("ProductID")
+                            .DataSource(source => source
+                                  .Custom()
+                                  .ServerFiltering(true)
+                                  .Transport(transport => transport
+                                    .Read(read =>
+                                    {
+                                        read.Action("Students_Read", "Home");
+                                    }))
+                            )
+                            .Events(e => e.Change("SR.DprPro.Instance.onDropDownChange"))
+
+                            .AutoBind(false))
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-sm-2">
+                    <div class="form-group" style="display:flex;">
+                        <label class="col-sm-2 control-label k-p-1"">Sub</label>
+                        <div class="col-sm-10 ">
+                            @(Html.Kendo().DropDownList()
+                            .Name("sub")
+                            .HtmlAttributes(new { style = "width:100%" })
+                            .OptionLabel("Select...")
+                            .DataTextField("ProductName")
+                            .DataValueField("ProductID")
+                            .DataSource(source => source
+                                  .Custom()
+                                  .ServerFiltering(true)
+                                  .Transport(transport => transport
+                                    .Read(read =>
+                                    {
+                                        read.Action("Students_Read", "Home");
+                                    }))
+                            )
+                            .Events(e => e.Change("SR.DprPro.Instance.onDropDownChange"))
+
+                            .AutoBind(false))
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-sm-2">
+                    <div class="form-group" style="display:flex; ">
+                        <label class="col-sm-2 control-label k-p-1">Location</label>
+                        <div class="col-sm-10" style="margin-left:20px;">
+                            @(Html.Kendo().DropDownList()
+                            .Name("location")
+                            .HtmlAttributes(new { style = "width:100%" })
+                            .OptionLabel("Select...")
+                            .DataTextField("ProductName")
+                            .DataValueField("ProductID")
+                            .DataSource(source => source
+                                  .Custom()
+                                  .ServerFiltering(true)
+                                  .Transport(transport => transport
+                                    .Read(read =>
+                                    {
+                                        read.Action("Students_Read", "Home");
+                                    }))
+                            )
+                            .Events(e => e.Change("SR.DprPro.Instance.onDropDownChange"))
+
+                            .AutoBind(false))
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-sm-3">
+                    <div class="row k-display-flex">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label k-p-1">Start</label>
+                            <div class="col-sm-8">
+                                @(Html.Kendo().TimePicker()
+                            .Name("dateTimePicker")
+                            .HtmlAttributes(new { style = "width:100px;" })
+                            )
+
+
+                            </div>
+                        </div>
+                        <div class="form-group k-ml-9">
+                            <label class="col-sm-4 control-label k-p-1">End</label>
+                            <div class="col-sm-8">
+                                @(Html.Kendo().TimePicker().Name("TimePicker").HtmlAttributes(new {style="width:100px;" }))
+
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="col col-sm-2">
+                    <button class="btn btn-primary pull-right k-ml-2" id="closebtn" @(!true ? "disabled=\"disabled\"" : "")><i class="fa fa-remove"></i></button>
+                    <button class="btn btn-primary pull-right" id="addCrew" @(!true ? "disabled=\"disabled\"" : "")><i class="fa fa-lg fa-plus-circle"></i></button>
+
+                </div>
+            </div>
+
+
+
+            <div class="row k-mr-7 k-mb-2">
+                <div class="col col-sm-2">
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label k-mt-2">PaxUp</label>
+                        <div class="col-sm-7">
+                            @(Html.Kendo().NumericTextBox<int>()
+                            .Name("paxup")
+                            .Format("p0")
+                            .Value(0)
+                            .Min(0)
+                            .HtmlAttributes(new { style = "width: 100%"})
+                        )
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-sm-2">
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label k-mt-2">PaxDown</label>
+                        <div class="col-sm-7">
+                            @(Html.Kendo().NumericTextBox<int>()
+                            .Name("paxdown")
+                            .Format("p0")
+                            .Min(0)
+                            .Value(0)
+                            .HtmlAttributes(new { style = "width: 100%"})
+                        )
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-sm-2">
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label k-mt-2">Lift</label>
+                        <div class="col-sm-7">
+                            @(Html.Kendo().NumericTextBox<int>()
+                            .Name("lift")
+                            .Format("p0")
+                            .Min(0)
+                            .Value(0)
+                            .HtmlAttributes(new { style = "width: 100%"})
+                        )
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label k-mt-2">Cargo</label>
+                        <div class="col-sm-6">
+                            @(Html.Kendo().TextBox()
+                            .Name("cargo")
+                            .HtmlAttributes(new { style = "width: 100px"})
+                        )
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label k-mt-2">Comment</label>
+                        <div class="col-sm-6">
+                            @(Html.Kendo().TextBox()
+                            .Name("comment")
+                            .HtmlAttributes(new { style = "width: 150px"})
+                        )
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+               
+                
+            
+
+            @(Html.Kendo().Grid<RemoteBindingGrid.Models.Student>()
+            .Name("Grid")
+            .Height(300)
+            .Columns(columns => {
+                columns.Bound(s => s.StudentID);
+                columns.Bound(p => p.StudentName).Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)));
+                columns.Bound(p => p.StudentCity);
+
+            })
+            .ToolBar(toolbar => {
+
+
+       
+
+            })
+            .Height(550)
+            .Editable(editable => editable.Mode(GridEditMode.PopUp))
+            .Navigatable()
+            .Sortable(sortable => sortable.AllowUnsort(true))
+            .Scrollable()
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Cell))
+            .Events(events => events.Change("SR.DprPro.Instance.onChange"))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Batch(true)
+                .PageSize(20)
+                .ServerOperation(false)
+                .Model(model => model.Id(p => p.StudentID))
+                .Read("Read", "Home")
+
+            ))
+
+
+        </div>
+        <div id='Weather' class='hidden'>
+            <h4> Weather Here</h4>
+        </div>
+        <div id='Transport' class='hidden'>
+            <h4> Transport here</h4>
+        </div>
+        <div id='HSE' class='hidden'>
+            <h4> HSE</h4>
+        </div>
+        <div id='Additional' class='hidden'>
+            <h4>  Additional info</h4>
+        </div>
+    </div>}

@@ -1,0 +1,100 @@
+﻿.k-grid .k-grid-search {
+    display: flex;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+
+.fa, .glyphicon {
+    font-size: 28px;
+    color: black;
+    padding:5px;
+    border-color:gainsboro;
+}
+
+.fa-ban{
+    color:white;
+}
+
+.fa-caret-right {
+    margin: -3px 10px 0px 0px;
+    color: dimgray;
+}
+
+.rowTemp {
+    display: flex;
+}
+
+
+.k-window-titlebar {
+    background-color: #1c5a7c;
+    color: white;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+
+.k-actions {
+    color: dimgray;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+
+.k-window {
+    
+    border-radius: 5px;
+    
+}
+
+
+.block{
+    display:flex;
+}
+
+.datePicker{
+    width: 200px;
+    margin: 15px 20px 0px 30px;
+}
+
+
+.transport{
+    width: 200px;
+    margin: 15px 20px 0px 60px;
+}
+
+.template {
+    width: 200px;
+    margin: 15px 20px 0px 64px;
+}
+
+.k-dropdownlist{
+    background-color:transparent;
+}
+
+.pickerLabel {
+    color: dimgray;
+    margin: 20px 20px 0px 20px;
+}
+
+
+.k-actions .k-button:nth-child(2) {
+    background-color: #1c5a7c;
+}
+
+a {
+  border-color:lightgray;
+  border-radius:2px;
+}
+
+
+button {
+    width: 40px;
+    height: 39px;
+    border-color: lightgray;
+    border-radius: 2px;
+}
+
+
+
+
